@@ -13,7 +13,6 @@ from plotly.graph_objs import Bar
 import pickle
 from sqlalchemy import create_engine
 
-
 app = Flask(__name__)
 
 def tokenize(text):
@@ -41,15 +40,9 @@ model = pickle.load(bz2.BZ2File("../models/classifier.pbz2",'rb'))
 @app.route('/index')
 def index():
     
-    # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
-    genre_counts = df.groupby('genre').count()['message']
-    genre_names = list(genre_counts.index)
-    
-
 # extract data needed for visuals
     #chart 1 - distribution of message genres
-    genre_counts = df.groupby('genre').count()['message']
+    genre_counts = df.groupby('genre').count()['message'].sort_values(ascending=False)
     genre_names = list(genre_counts.index)
     
     #chart 2 - distribution of message categories
