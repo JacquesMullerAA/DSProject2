@@ -41,9 +41,13 @@ model = pickle.load(bz2.BZ2File("../models/classifier.pbz2",'rb'))
 def index():
     
 # extract data needed for visuals
-    #chart 1 - distribution of message genres
-    genre_counts = df.groupby('genre').count()['message'].sort_values(ascending=False)
+    
+    #chart 1 - distribution of infracstructure-related message by genre
+    genre_counts = df[df['infrastructure_related'] == 1].groupby('genre').count()['message'] 
+    genre_counts = (genre_counts/genre_counts.sum()).sort_values(ascending=False)
     genre_names = list(genre_counts.index)
+    #genre_counts = df.groupby('genre').count()['message'].sort_values(ascending=False)
+    #genre_names = list(genre_counts.index)
     
     #chart 2 - distribution of message categories
     cat_df = df.drop(['id', 'message', 'original', 'genre'], axis = 1).sum()/len(df)
@@ -62,9 +66,9 @@ def index():
             ],
 
             'layout': {
-                'title': 'Distribution of Message Genres',
+                'title': 'Distribution of Infrastructure-related Message Genres',
                 'yaxis': {
-                    'title': "Count"
+                    'title': "Fraction"
                 },
                 'xaxis': {
                     'title': "Genre"
@@ -82,7 +86,7 @@ def index():
             'layout': {
                 'title': 'Top 15 Disaster Categories by Fraction of Messages',
                 'yaxis': {
-                    'title': "Fractions"
+                    'title': "Fraction"
                 },
                 'xaxis': {
                     'title': "Disaster Catergories"
